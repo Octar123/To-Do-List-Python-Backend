@@ -22,7 +22,22 @@ def get_items():
     items = Item.query.all()
     item_list = []
     for item in items:
-        item_data = {'name' : item.name, 'quantity' : item.quantity}
+        item_data = {'id': item.id, 'name' : item.name, 'quantity' : item.quantity}
         item_list.append(item_data)
     
     return jsonify({'items' : item_list})
+
+#Update Items
+@items_bp.route("/update/<int:item_id>", methods=['PUT'])
+def update_items(item_id):
+
+    item_to_update = Item.query.get_or_404(item_id);
+
+    incoming_data = request.get_json()
+    item_to_update.name = incoming_data['name']
+    item_to_update.quantity = incoming_data['quantity']
+
+    db.session.commit()
+
+    return jsonify({'message' : f"Item Updated Successfully"}), 200
+    
