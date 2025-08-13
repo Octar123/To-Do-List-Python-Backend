@@ -33,7 +33,8 @@ def login():
     user = User.query.filter_by(username=username).first()
     if user and bcrypt.check_password_hash(user.password_hash, password):
         access_token = create_access_token(identity=username)
-        return jsonify(access_token=access_token)
+        return jsonify({'message' : "Login Successfull",
+                        'access_token' : access_token})
     
     return jsonify({"error": "Invalid UserName or Password"}), 401
 
